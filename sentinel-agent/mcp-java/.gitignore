@@ -1,0 +1,8 @@
+target/
+.mcp.pid
+.mcp.log
+.idea/
+*.iml
+.classpath
+.project
+.settings/

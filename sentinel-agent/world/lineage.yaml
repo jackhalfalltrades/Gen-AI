@@ -1,0 +1,49 @@
+# Datasets + classification tags. Incident agent: "what is downstream?"
+# Security agent: escalate when the touched table is PCI (week 5).
+
+datasets:
+  - id: inventory.stock
+    tags: []
+    downstream: [inventory.availability.v1, checkout.orders]
+  - id: inventory.availability.v1
+    kind: topic
+    tags: []
+    downstream: [checkout.orders]
+  - id: promotions.rules
+    tags: []
+    downstream: [promotions.prices.v1, checkout.orders]
+  - id: promotions.prices.v1
+    kind: topic
+    tags: []
+    downstream: [checkout.orders]
+  - id: payments.tokens
+    tags: [PII]
+    downstream: [payments.transactions]
+  - id: payments.transactions
+    tags: [PCI, PII]
+    downstream: [checkout.orders, fulfillment.shipments]
+  - id: checkout.orders
+    tags: [PII]
+    downstream: [fulfillment.shipments]
+  - id: fulfillment.shipments
+    tags: [PII]
+    downstream: []
+  - id: identity.sessions
+    tags: [PII]
+    downstream: []
+
+principals:
+  - id: svc-checkout
+    kind: service_account
+    roles: [checkout.write]
+  - id: svc-analytics
+    kind: service_account
+    roles: [warehouse.read]
+    notes: Must not SELECT payments.transactions (PCI).
+  - id: svc-inventory
+    kind: service_account
+    roles: [inventory.write]
+  - id: svc-payment-db
+    kind: service_account
+    roles: [payment.db]
+    notes: Used by payment to open Postgres. Password must rotate; expired lock stops charges.

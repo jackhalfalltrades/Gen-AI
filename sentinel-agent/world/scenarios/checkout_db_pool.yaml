@@ -1,0 +1,26 @@
+id: checkout_db_pool
+kind: incident
+title: Checkout Hikari pool exhausted
+services: [checkout, payment]
+window_minutes: 20
+injected_fault: |
+  checkout HikariCP pool max=20. Traffic spike holds connections on
+  payments.transactions lookups. Threads wait on Connection is not available.
+signatures:
+  - service: checkout
+    kind: log
+    pattern: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+  - service: checkout
+    kind: metric
+    name: hikari.connections.active
+    value: 20
+  - service: checkout
+    kind: metric
+    name: checkout.p99_ms
+    value: 4200
+expected:
+  root_cause: checkout database connection pool exhausted (Hikari max=20)
+  primary_service: checkout
+  related_dataset: payments.transactions
+  tags: []
+  notes: Latency is the symptom. Pool saturation is the cause.

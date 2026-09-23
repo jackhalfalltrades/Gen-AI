@@ -1,0 +1,28 @@
+id: promo_pricing
+kind: incident
+title: Promotion-engine config push breaks list prices
+services: [promotions, checkout]
+window_minutes: 15
+injected_fault: |
+  Config push sets discount_bps=10000 (100%) on a catch-all SKU rule.
+  checkout.orders show $0.00 payable. promotions.prices.v1 carries the bad rule.
+signatures:
+  - service: promotions
+    kind: log
+    pattern: applied config rev=2024-11-28.14 config_sha=badf00d
+  - service: promotions
+    kind: log
+    pattern: rule catchall discount_bps=10000
+  - service: checkout
+    kind: log
+    pattern: payable_cents=0 for sku with list_cents>0
+  - service: promotions
+    kind: metric
+    name: promotions.zero_price_rate
+    value: 0.41
+expected:
+  root_cause: promotion config push set catch-all discount_bps=10000
+  primary_service: promotions
+  related_dataset: promotions.rules
+  tags: []
+  notes: Lineage promotions.rules → promotions.prices.v1 → checkout.orders.

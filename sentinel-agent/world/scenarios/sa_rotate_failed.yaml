@@ -1,0 +1,35 @@
+id: sa_rotate_failed
+kind: security
+title: Payment service account password expired
+services: [payment]
+window_minutes: 30
+
+injected_fault: |
+  The payment service account svc-payment-db can no longer authenticate
+  because its password has expired. Repeated authentication attempts cause
+  the account to become locked. Payment database operations begin failing.
+
+signatures:
+  - service: payment
+    kind: iam
+    pattern: authentication failed principal=svc-payment-db reason=password_expired
+
+  - service: payment
+    kind: log
+    pattern: database authentication failed user=svc-payment-db account_locked=true
+
+  - service: payment
+    kind: metric
+    name: iam.service_account_auth_failures
+    value: 1
+
+expected:
+  root_cause: svc-payment-db password expired and account became locked
+  primary_service: payment
+  related_account: svc-payment-db
+  tags: [IAM, AUTHENTICATION]
+  notes: >
+    The incident is caused by an expired service account password.
+    Repeated authentication attempts eventually lock the account.
+    The security graph should correlate IAM authentication failures,
+    account lock events, and payment service database failures.

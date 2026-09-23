@@ -1,0 +1,22 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: sentinel-mcp
+  datasource:
+    url: jdbc:postgresql://localhost:5433/sentinel
+    username: sentinel
+    password: sentinel
+  ai:
+    mcp:
+      server:
+        name: sentinel-mcp
+        version: 0.1.0
+        protocol: STREAMABLE
+        type: SYNC
+        annotation-scanner:
+          enabled: true
+
+sentinel:
+  lineage-path: ../world/lineage.yaml

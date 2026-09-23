@@ -1,0 +1,28 @@
+id: inventory_lag
+kind: incident
+title: Inventory-sync consumer lag causing oversells
+services: [inventory, checkout, fulfillment]
+window_minutes: 20
+injected_fault: |
+  inventory-sync consumer on inventory.sync.v1 falls behind (~90s lag).
+  checkout reads stale availability and sells units already reserved.
+signatures:
+  - service: inventory
+    kind: log
+    pattern: kafka consumer lag 92000ms on inventory.sync.v1
+  - service: inventory
+    kind: metric
+    name: kafka.consumer.lag_ms
+    value: 92000
+  - service: checkout
+    kind: log
+    pattern: oversell reserved_qty exceeded stock for sku
+  - service: fulfillment
+    kind: log
+    pattern: pick failed, on-hand 0 for sku already sold
+expected:
+  root_cause: inventory-sync Kafka consumer lag; checkout used stale stock
+  primary_service: inventory
+  related_dataset: inventory.stock
+  tags: []
+  notes: Downstream of inventory.stock includes checkout.orders.

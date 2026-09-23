@@ -1,0 +1,53 @@
+[project]
+name = "digital-twin-agent"
+version = "0.1.0"
+description = "Career Digital Twin: grounded RAG + LangGraph + memory + MCP"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic-settings>=2.6.0",
+    "python-dotenv>=1.0.1",
+    "sqlalchemy>=2.0.36",
+    "psycopg[binary]>=3.2.0",
+    "pgvector>=0.3.6",
+    "openai>=1.55.0",
+    "anthropic>=0.39.0",
+    "pypdf>=5.1.0",
+    "httpx>=0.27.0",
+    "langgraph>=0.2.50",
+    "langchain-core>=0.3.20",
+    "langchain-text-splitters>=0.3.2",
+    "mcp>=1.12.0",
+    "gradio>=6.28.0",
+    "pydf>=12",
+    "requests>=2.34.2",
+    "langchain-openai>=1.6.3",
+    "langgraph-checkpoint-sqlite>=3.1.1",
+    "openai-agents>=0.22.3",
+    "langchain-community>=0.4.2",
+    "langchain-postgres>=0.0.18",
+    "shared",
+]
+
+[tool.uv.sources]
+shared = { path = "../shared", editable = true }
+
+[project.optional-dependencies]
+hf = ["sentence-transformers>=3.3.0"]
+dev = ["pytest>=8.3.0", "pytest-asyncio>=0.24.0"]
+
+[project.scripts]
+twin = "app.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

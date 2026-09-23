@@ -1,0 +1,28 @@
+id: pci_table_read
+kind: security
+title: Service account suddenly reading the PCI-tagged payments table
+services: [payment]
+window_minutes: 30
+injected_fault: |
+  svc-analytics (warehouse.read) issues SELECT on payments.transactions.
+  That dataset is tagged PCI. This is privilege misuse, not a checkout outage.
+signatures:
+  - service: payment
+    kind: iam
+    pattern: SELECT on payments.transactions principal=svc-analytics
+  - service: payment
+    kind: log
+    pattern: audit deny? false rows=48000 table=payments.transactions
+  - service: payment
+    kind: metric
+    name: iam.unexpected_pci_reads
+    value: 1
+expected:
+  root_cause: svc-analytics SELECT on PCI-tagged payments.transactions
+  primary_service: payment
+  related_dataset: payments.transactions
+  related_account: svc-analytics
+  tags: [PCI]
+  notes: >
+    Severity must come from lineage tags (PCI), not from the prompt.
+    Week 5 security graph escalates because related_dataset.tags contains PCI.

@@ -1,0 +1,34 @@
+# Retail services Sentinel investigates. Kafka topics are named here so a
+# later KafkaSink can emit without rewriting the world.
+
+services:
+  - id: checkout
+    name: Checkout
+    owns: [checkout.orders]
+    produces: [checkout.orders.v1]
+    consumes: [inventory.availability.v1, payment.auth.v1]
+  - id: payment
+    name: Payment
+    owns: [payments.transactions, payments.tokens]
+    produces: [payment.auth.v1]
+    consumes: []
+  - id: inventory
+    name: Inventory
+    owns: [inventory.stock]
+    produces: [inventory.availability.v1]
+    consumes: [inventory.sync.v1]
+  - id: fulfillment
+    name: Fulfillment
+    owns: [fulfillment.shipments]
+    produces: []
+    consumes: [checkout.orders.v1]
+  - id: promotions
+    name: Promotions
+    owns: [promotions.rules]
+    produces: [promotions.prices.v1]
+    consumes: []
+  - id: login
+    name: Login
+    owns: [identity.sessions]
+    produces: []
+    consumes: []

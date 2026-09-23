@@ -1,0 +1,769 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+:root {
+  --slack-aubergine: #3f0e40;
+  --slack-aubergine-hover: #522653;
+  --slack-sidebar-text: #c7b6c9;
+  --slack-sidebar-active: #1164a3;
+  --slack-green: #007a5a;
+  --slack-green-hover: #148567;
+  --slack-border: #e8e8e8;
+  --slack-hover: #f8f8f8;
+  --slack-text: #1d1c1d;
+  --slack-muted: #616061;
+  --slack-link: #1264a3;
+  --slack-composer: #dddddd;
+}
+
+html {
+  color-scheme: light only;
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+html, body, .gradio-container, .gradio-container.dark {
+  background: #fff !important;
+  color: var(--slack-text) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html, body, .gradio-container, .gradio-container.dark {
+    background: #fff !important;
+    color: var(--slack-text) !important;
+  }
+}
+
+.gradio-container,
+.gradio-container.dark,
+.gradio-container .dark {
+  --body-background-fill: #ffffff !important;
+  --background-fill-primary: #ffffff !important;
+  --background-fill-secondary: #ffffff !important;
+  --block-background-fill: #ffffff !important;
+  --panel-background-fill: #ffffff !important;
+  --input-background-fill: #ffffff !important;
+  --border-color-primary: #e8e8e8 !important;
+  --block-border-color: transparent !important;
+  --body-text-color: #1d1c1d !important;
+  --block-label-text-color: #616061 !important;
+  --block-title-text-color: #1d1c1d !important;
+  --block-shadow: none !important;
+  --shadow-drop: none !important;
+  color-scheme: light only !important;
+}
+
+.gradio-container {
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.gradio-container .contain,
+.gradio-container .main {
+  padding: 0 !important;
+  max-width: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+footer { display: none !important; }
+
+#workspace {
+  align-items: stretch !important;
+  flex-wrap: nowrap !important;
+  gap: 0 !important;
+  background: #fff !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: 100% !important;
+}
+
+#sidebar {
+  flex: 0 0 16rem !important;
+  width: 16rem !important;
+  min-width: 16rem !important;
+  max-width: 16rem !important;
+  background: var(--slack-aubergine) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  align-self: stretch !important;
+  height: 100% !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#sidebar,
+#sidebar .column,
+#sidebar .form,
+#sidebar .gap,
+#slack-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+}
+
+#sidebar > .block,
+#sidebar > div,
+#sidebar .html-container {
+  flex-grow: 0 !important;
+}
+
+#sidebar .block,
+#sidebar .wrap,
+#sidebar > div,
+#sidebar .stretch,
+#sidebar .form,
+#sidebar .gap,
+#slack-nav,
+#slack-nav > div,
+#slack-nav .block,
+#slack-nav .stretch {
+  flex: 0 0 auto !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  background: transparent !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#slack-nav {
+  flex: 0 0 auto !important;
+  height: auto !important;
+}
+
+.slack-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0 0;
+}
+
+.slack-row {
+  display: grid !important;
+  grid-template-columns: 16px minmax(0, 1fr) !important;
+  column-gap: 8px !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #c7b6c9 !important;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 28px !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  cursor: pointer;
+  appearance: none !important;
+}
+
+.slack-row.heading {
+  cursor: default;
+  height: 32px;
+}
+
+.slack-row .hash {
+  opacity: 0.7;
+  text-align: left;
+  flex: none !important;
+}
+
+.slack-row > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slack-row.active {
+  background: #1164a3 !important;
+  color: #fff !important;
+}
+
+.slack-row:not(.heading):hover {
+  background: #522653;
+  color: #fff;
+}
+
+#hidden-chans {
+  position: fixed !important;
+  left: -9999px !important;
+  top: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  flex: 0 0 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  opacity: 0 !important;
+}
+
+.slack-side {
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.slack-ws {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.slack-ws small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--slack-sidebar-text);
+  margin-top: 0.15rem;
+}
+
+
+.slack-chan,
+button.slack-chan,
+.slack-chan-static {
+  display: block;
+  width: calc(100% - 1rem);
+  box-sizing: border-box;
+  margin: 0 0.5rem;
+  padding: 0.35rem 0.65rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--slack-sidebar-text);
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.slack-chan-static {
+  cursor: default;
+}
+
+.slack-chan.active {
+  background: var(--slack-sidebar-active);
+  color: #fff;
+  font-weight: 700;
+}
+
+.slack-chan span {
+  opacity: 0.75;
+  margin-right: 0.25rem;
+}
+
+button.slack-chan:hover {
+  background: var(--slack-aubergine-hover);
+  color: #fff;
+}
+
+#main-pane,
+#header .block,
+#header .wrap,
+#header > div {
+  background: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#main-pane > div:not(#composer-box) {
+  background: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#main-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+#main-pane > div:not(#header-row):not(#chatbot):not(#composer-box):not(#typing) {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+}
+
+#header-row {
+  flex: 0 0 auto !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 0 !important;
+  border-bottom: 1px solid var(--slack-border);
+  background: #fff !important;
+}
+
+#header-row > div {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.slack-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.15rem;
+  background: #fff;
+  flex: 1;
+}
+
+.slack-header h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--slack-text);
+}
+
+.slack-header p {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--slack-muted);
+}
+
+.slack-online {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--slack-green);
+}
+
+/* Chat — Slack message stream, not a Gradio card */
+#chatbot,
+#chatbot .block,
+#chatbot .wrapper,
+#chatbot .wrap,
+#chatbot > div,
+#chatbot [class*="bubble"],
+#chatbot [class*="panel"],
+#chatbot [class*="scroll"] {
+  border: none !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  background-color: #fff !important;
+  border-radius: 0 !important;
+}
+
+#chatbot label,
+#chatbot .label-wrap,
+#chatbot button[aria-label="Share"],
+#chatbot button[aria-label="Copy"],
+#chatbot .icon-button-wrapper,
+#chatbot .copy-button,
+#chatbot .share-button {
+  display: none !important;
+}
+
+#chatbot {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+
+#chatbot .wrapper,
+#chatbot [class*="wrapper"],
+#chatbot [role="log"],
+#chatbot .panel-wrap {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+#chatbot .placeholder,
+#chatbot [class*="placeholder"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  color: var(--slack-muted) !important;
+  background: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  padding: 2rem 1.5rem !important;
+}
+
+#chatbot,
+#chatbot * {
+  color-scheme: light only !important;
+}
+
+#chatbot .message,
+#chatbot .bot,
+#chatbot .user,
+#chatbot [class*="message"],
+#chatbot [class*="Message"],
+#chatbot li,
+#chatbot article {
+  background: #fff !important;
+  background-color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--slack-text) !important;
+  font-size: 15px !important;
+  line-height: 1.46668 !important;
+  border-radius: 0 !important;
+}
+
+#chatbot .message:hover,
+#chatbot .bot:hover,
+#chatbot .user:hover,
+#chatbot li:hover,
+#chatbot article:hover {
+  background: var(--slack-hover) !important;
+  background-color: var(--slack-hover) !important;
+}
+
+#chatbot .avatar-container {
+  width: 36px !important;
+  height: 36px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
+
+#chatbot .avatar-container img,
+#chatbot img[src*="avatars"] {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+}
+
+#chatbot a {
+  color: var(--slack-link) !important;
+}
+
+#chatbot table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0.4rem 0 0 !important;
+  font-size: 14px !important;
+}
+
+#chatbot th,
+#chatbot td {
+  border: 1px solid var(--slack-border) !important;
+  padding: 0.45rem 0.7rem !important;
+  text-align: left !important;
+  vertical-align: top !important;
+  background: #fff !important;
+  color: var(--slack-text) !important;
+}
+
+#chatbot th {
+  background: #f8f8f8 !important;
+  font-weight: 700 !important;
+  color: var(--slack-muted) !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+
+#composer-box,
+#main-pane #composer-box,
+#composer-box.wrap,
+#composer-box.block {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  width: auto !important;
+  margin: 0.75rem !important;
+  padding: 0 !important;
+  background: #fff !important;
+  border: 1px solid #d1d2d3 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px #d1d2d3 !important;
+  gap: 0 !important;
+}
+
+#composer-box > div,
+#composer-box .block,
+#composer-box .wrap {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+#composer,
+#composer .block,
+#composer .wrap {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#composer textarea,
+#composer input {
+  background: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  color: var(--slack-text) !important;
+  padding: 12px 16px 4px !important;
+  font-family: inherit !important;
+  min-height: 44px !important;
+}
+
+#composer textarea::placeholder,
+#composer input::placeholder {
+  color: #9a9b9d !important;
+}
+
+#composer textarea:focus,
+#composer input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#composer-bar {
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 0.35rem !important;
+  padding: 2px 8px 6px 10px !important;
+  background: #fff !important;
+  min-height: 36px;
+}
+
+.slack-tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #616061;
+}
+
+.slack-tools span {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.slack-tools span:hover {
+  background: var(--slack-hover);
+}
+
+#composer-actions {
+  margin-left: auto !important;
+  width: auto !important;
+  min-width: 68px !important;
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-wrap: nowrap !important;
+  gap: 2px !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#ask-btn,
+#reset-btn,
+#ask-btn button,
+#reset-btn button {
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  box-shadow: none !important;
+}
+
+#ask-btn,
+#ask-btn button {
+  background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23616061' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 2L11 13'/><path d='M22 2L15 22l-4-9-9-4 20-7z'/></svg>") center / 16px no-repeat !important;
+}
+
+#reset-btn,
+#reset-btn button {
+  background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23616061' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/><path d='M3 3v5h5'/></svg>") center / 16px no-repeat !important;
+}
+
+#ask-btn:hover,
+#ask-btn button:hover,
+#reset-btn:hover,
+#reset-btn button:hover {
+  background-color: var(--slack-hover) !important;
+}
+
+body:has(.pending) #ask-btn,
+body:has(.pending) #ask-btn button,
+.gradio-container:has(.pending) #ask-btn,
+.gradio-container:has(.pending) #ask-btn button {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23007a5a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 2L11 13'/><path d='M22 2L15 22l-4-9-9-4 20-7z'/></svg>") !important;
+}
+
+#typing,
+#typing .block,
+#typing .wrap {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.slack-typing {
+  margin: 0 1.15rem 0.35rem;
+  color: #8d8d8d;
+  font-size: 13px;
+  line-height: 1.3;
+  min-height: 1.2em;
+}
+
+.slack-typing::after {
+  content: " …";
+  animation: typing-ellipsis 1.2s steps(4, end) infinite;
+}
+
+.slack-typing[hidden] {
+  display: none !important;
+}
+
+@keyframes typing-ellipsis {
+  0% { content: ""; }
+  25% { content: " ."; }
+  50% { content: " .."; }
+  75%, 100% { content: " ..."; }
+}
+
+/* Gradio's default "Processing" overlay on the chat pane */
+#chatbot .wrap.translucent,
+#chatbot .progress-text,
+.progress-level,
+.meta-text,
+.eta-bar {
+  display: none !important;
+}
+
+@media (max-width: 720px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .gradio-container {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  #workspace {
+    flex-wrap: wrap !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  #sidebar {
+    flex: 0 0 auto !important;
+    align-self: flex-start !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  #sidebar .block,
+  #sidebar .wrap,
+  #sidebar > div {
+    height: auto !important;
+  }
+
+  #main-pane,
+  #main-pane > div:not(#header-row):not(#chatbot):not(#composer-box):not(#typing) {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+
+  #chatbot {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
