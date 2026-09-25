@@ -12,20 +12,59 @@ Two workflows, one graph: `kind` is `incident` or `security`. A keyword router p
 
 ## Graph
 
-![LangGraph: START to route_kind to attach_runbook to call_model looping tools then await_approval](docs/graph.png)
+Compiled PNG (`uv run python draw_graph.py`) plus the bounce the renderer often flattens:
 
-```text
-START → route_kind → attach_runbook → call_model ⇄ tools → await_approval → END
+![LangGraph: route_kind, attach_runbook, investigator tools loop, analyst, human approval](docs/graph.png)
+
+```mermaid
+flowchart TD
+  start([START]) --> route_kind --> attach_runbook --> call_investigator_model
+  call_investigator_model -->|tool calls| tools --> call_investigator_model
+  call_investigator_model -->|draft, not yet passed| call_analyst_model
+  call_analyst_model -->|note to investigator only| call_investigator_model
+  call_investigator_model -->|draft after analyst pass| await_approval --> endNode([END])
 ```
 
 - **route_kind** — `incident` vs `security` from the alert text, unless the client already sent `kind`.
-- **attach_runbook** — always stuffs a playbook from `skills/*.md`. Not a model choice. I tried it as a tool first; the model skipped it and guessed Prometheus names.
-- **call_model / tools** — four tools only, served by the Java MCP: `search_logs`, `get_metrics`, `get_downstream`, `lookup_iam`.
-- **await_approval** — LangGraph `interrupt`. The checkpoint is in Postgres, so killing uvicorn does not lose the case.
+- **attach_runbook** — always stuffs a playbook from `skills/*.md`. Not a model choice.
+- **call_investigator_model / tools** — investigator. Four Java MCP tools only. This is who the human approves.
+- **call_analyst_model** — background. No tools. Writes a `SystemMessage` only the investigator sees. Never goes to `await_approval`.
+- **await_approval** — interrupt on the investigator’s last `ROOT_CAUSE`. Postgres checkpoint.
 
-`thread_id` is the `case_id`. There is also a `cases` table so you can list investigations without digging through checkpoint blobs.
+`thread_id` is the `case_id`. The `cases` table is the list you can query without opening checkpoint blobs.
 
-Regenerate the PNG: `uv run python draw_graph.py`.
+---
+
+## Walkthrough
+
+One alert, two models, one human.
+
+1. You `POST /investigate` with `"checkout showing $0.00 payable after a promotions config push"`.
+2. Router sets `kind=incident` (or you sent it). `attach_runbook` injects `promo_pricing.md`.
+3. Investigator calls tools. It might get `promotions.zero_price_rate=0.41` and `payable_cents=0`, then write `ROOT_CAUSE: config push set discount to full price`.
+4. Analyst reads that draft (background). It never talks to you. It writes a note to the investigator: `more`, `hold`, or `pass`.
+5. Investigator runs again. After `pass` it reprints `ROOT_CAUSE` with no extra tools.
+6. Human gets `pending_approval` on **that** investigator line. You `POST .../decision`.
+
+Eval does the same path and auto-approves at step 6 so it does not hang.
+
+---
+
+## When the analyst earns its keep
+
+Promo is the case that used to fail eval. Playbook says: search promotions for `discount_bps`. Investigator saw checkout `$0` and the zero-price metric, skipped the log line, and said “full price.” Grade wanted `discount_bps=10000`.
+
+Analyst `more` looks like:
+
+```text
+verdict: more
+ask: search_logs(service="promotions", query="discount_bps", window="15m")
+reason: draft never cites the catch-all bps line the playbook asked for
+```
+
+That note goes only to the investigator. It runs the search, writes `ROOT_CAUSE` again. Analyst `pass` means “submit this to the operator,” not “I accept the case.” The interrupt is still the investigator’s sentence.
+
+`hold` is the other useful vote: tools returned `[]` and the draft treated that as a signature. Rewrite, no new fetch.
 
 ---
 
@@ -40,7 +79,7 @@ Layers, top to bottom. The agent only talks to the MCP. It does not know if a ro
      FastAPI  :8080          investigate, decide, cases
             │
             ▼
-     LangGraph               route → playbook → tools ⇄ model → approve
+     LangGraph               route → playbook → investigator ⇄ tools; analyst notes investigator; investigator → approve
             │
             ▼
      Java MCP :8090          search_logs, get_metrics, get_downstream, lookup_iam

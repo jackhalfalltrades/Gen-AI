@@ -2,7 +2,7 @@
 
 A recruiter-facing agent that answers only from Chandra Peravelli’s resume and LinkedIn profile.
 
-One of two projects in the [GenAI portfolio](../README.md) (the other is [sentinel-agent](../sentinel-agent)). The UI is a Slack-like Gradio workspace (`#interactive-resume`, `#experience`, `#skills`). The backend is a LangGraph state machine over RAG in Postgres + pgvector.
+One of two projects in the [GenAI portfolio](../README.md) (the other is [sentinel-agent](../sentinel-agent)). The UI is a Slack-like Gradio workspace (`#interactive-resume`, `#experience`, `#skills`). The backend is a LangGraph state machine over RAG in Postgres + pgvector. Sentinel’s analyst is the same idea as `evaluate_output` here, but it only writes notes to the investigator. The human still approves the investigator.
 
 ## What it proves
 

@@ -4,6 +4,8 @@ Staff software engineer (Cloudera, Target, Best Buy). This repo is what I send w
 
 Each project has its own README for architecture, how to run it, and the bugs I hit. This file is only the map.
 
+![Digital Twin and Sentinel architecture](docs/linkedin-featured.png)
+
 **LinkedIn:** [linkedin.com/in/chandrakanthperavelli](https://www.linkedin.com/in/chandrakanthperavelli)
 
 ---
@@ -14,7 +16,7 @@ Each project has its own README for architecture, how to run it, and the bugs I 
 |                                            |                      |                                                                                                                                                                                                                     |
 | ------------------------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [digital-twin-agent](./digital-twin-agent) | Interactive resume   | Recruiter asks about roles and skills. Answers come from resume/LinkedIn chunks in Postgres + pgvector, not from the model inventing a bio. Gradio UI, input/output guards, memory compact.                         |
-| [sentinel-agent](./sentinel-agent)         | Retail investigation | You hand it an alert. It uses Java MCP tools (logs, metrics, lineage, IAM), writes a `ROOT_CAUSE`, and waits for a human to accept or reject. Incident and security share one graph. Eval 6/6 on six seeded faults. |
+| [sentinel-agent](./sentinel-agent)         | Retail investigation | Alert in, Java MCP tools, analyst reviews the draft, human accepts or rejects. Incident and security share one graph. Eval 6/6 on six seeded faults. |
 
 
 Read those READMEs. Do not start from here if you want to run something.
@@ -28,10 +30,11 @@ Not a survey of GenAI. Only what the code does.
 
 | Topic              | Where     | What you will see                                                                                 |
 | ------------------ | --------- | ------------------------------------------------------------------------------------------------- |
-| LangGraph          | both      | Twin: route chat vs `#skills` / `#experience`. Sentinel: route kind → playbook → tools → approve. |
+| LangGraph          | both      | Twin: route chat vs `#skills` / `#experience`. Sentinel: investigator ⇄ tools; analyst talks only to investigator; human approves the investigator. |
+| Analyst agent      | sentinel  | Background reviewer. No tools. Notes go to the investigator only. Promo `$0` without `discount_bps` is `more`. Human never approves the analyst. |
 | RAG / pgvector     | twin      | PDF chunk → embed → top-k. The chat model sees retrieved text, not the whole resume.              |
 | Tools              | both      | Twin: `search_profile` is retrieval. Sentinel: four Java MCP tools (logs, metrics, lineage, IAM). |
-| MCP                | sentinel  | Spring AI 2.0 on `:8090`. Same methods on `GET /tools` for curl.                                  |
+| MCP                | sentinel  | Spring AI 2.0 on `:8090`. Same methods on `GET /tools/...` for curl.                              |
 | Human approval     | sentinel  | LangGraph `interrupt`. Checkpoint in Postgres. One decide path for incident and security.         |
 | Playbooks / skills | sentinel  | Markdown how-to, attached by a graph node (not a model choice). Keyword match, six files.         |
 | Guardrails         | twin      | LLM input gate (on-topic?) and output judge (grounded?). Fail → fixed fallback.                   |

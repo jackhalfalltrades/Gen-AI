@@ -1,3 +1,8 @@
+"""Investigator tools. HTTP to the Java MCP — the model never sees YAML files.
+
+Four tools only. Playbooks are not in this list on purpose (see attach_runbook).
+"""
+
 import httpx
 from langchain_core.tools import tool
 
@@ -7,6 +12,7 @@ BASE_URL = config.SENTINEL_MCP_URL
 
 
 def _get(path: str, **params) -> str:
+    """GET /tools/... on :8090. timeout so a dead Java box fails the tool, not the process."""
     r = httpx.get(f"{BASE_URL}{path}", params=params, timeout=10.0)
     r.raise_for_status()
     return r.text

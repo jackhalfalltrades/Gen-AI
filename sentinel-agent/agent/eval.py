@@ -17,10 +17,15 @@ ALERTS = {
 
 
 def _tokens(text: str) -> set[str]:
+    """Words longer than 2 chars. Grade is overlap, not an LLM judge."""
     return {w for w in "".join(c.lower() if c.isalnum() else " " for c in text).split() if len(w) > 2}
 
 
 def grade(expected: str, actual: str) -> bool:
+    """True if at least 40% of expected tokens appear in ROOT_CAUSE.
+
+    Brittle on purpose: promo must say 10000 / discount_bps, not just 'full price'.
+    """
     exp, got = _tokens(expected), _tokens(actual)
     if not exp:
         return False
@@ -28,6 +33,7 @@ def grade(expected: str, actual: str) -> bool:
 
 
 def main() -> int:
+    """Run all six YAML scenarios. investigate() auto-approves the interrupt."""
     passed = 0
     for path in sorted(config.SCENARIOS.glob("*.yaml")):
         scenario = yaml.safe_load(path.read_text())

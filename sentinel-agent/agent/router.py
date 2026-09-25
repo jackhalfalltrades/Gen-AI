@@ -1,18 +1,19 @@
-"""Triage: pick incident vs security from the alert text.
+"""Keyword triage: incident vs security from the alert text.
 
-Fill in route(). Graph node route_kind calls this when kind was not supplied.
+This is not a second graph. It only picks which policy string
+build_system_prompts() attaches. The tools and the approval node stay the same.
 """
 
 
 def route(alert: str) -> str:
     """Return 'incident' or 'security'.
 
-    Keyword v1: login / pci / select / svc- /
+    Why keywords: six alerts, no classifier. login / pci / select / svc- /
     password / credential / iam / auth → security, else incident.
+    route_kind skips this when the client already sent kind.
     """
     text = alert.lower()
     for word in ("login", "pci", "select", "svc-", "password", "credential", "iam", "auth"):
         if word in text:
             return "security"
     return "incident"
-
